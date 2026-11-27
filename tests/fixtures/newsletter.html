@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light dark">
+  <style>
+    :root { --brand: #1d4ed8; }
+    @media (prefers-color-scheme: dark) {
+      .card { background-color: #111; }
+    }
+    .card > .title { color: var(--brand); }
+    a:hover { text-decoration: underline; }
+    @keyframes pulse { from { opacity: 0; } to { opacity: 1; } }
+  </style>
+</head>
+<body>
+  <!--[if mso]><table><tr><td><![endif]-->
+  <div class="card" style="display: flex; gap: 12px; border-radius: 8px; width: calc(100% - 2rem);">
+    <img src="https://example.com/logo.webp?v=2" alt="Logo" width="120">
+    <h1 class="title">Nowości</h1>
+  </div>
+  <svg width="10" height="10"><circle r="5"></circle></svg>
+  <a href="mailto:kontakt@example.com">Napisz do nas</a>
+</body>
+</html>
