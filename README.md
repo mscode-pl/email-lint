@@ -176,7 +176,7 @@ pnpm build && node dist/cli/main.js examples
 
 ## License
 
-MIT. Support data from [caniemail](https://github.com/hteumeuleu/caniemail) by Rémi Parmentier, MIT License.
+MIT. Support data from [caniemail](https://github.com/hteumeuleu/caniemail) by Rémi Parmentier, MIT License, see [data/LICENSE-caniemail](data/LICENSE-caniemail).
 
 ---
 
