@@ -57,6 +57,7 @@ caniemail.com already tracks which client supports what. email-lint applies that
 | **Outlook conditionals understood** | Content inside `<!--[if !mso]><!-->` is hidden from Outlook for Windows, so it is not blamed for it. That is the hybrid layout most email frameworks generate. |
 | **Low noise by default** | `<body>`, `<style>`, tables, class selectors, `role` and `aria-*` are not reported, because the only fix would be removing them. `--strict` shows everything. |
 | **Reports you can share** | Markdown for a pull request, JSON for scripts, GitHub annotations on the pull request. |
+| **GitHub Action and MCP server** | One pull request comment that updates itself, and two tools your AI agent can call while it writes the email. |
 
 ## Works with your stack
 
@@ -106,10 +107,51 @@ Commit a config file so everyone on the team runs the same check:
 
 Save it as `email-lint.config.json`, and `email-lint` with no arguments uses it. The interactive mode can write it for you.
 
-In GitHub Actions, `--format github` turns every finding into an annotation on the pull request:
+### GitHub Action
+
+The action marks every finding on the line it is on in the pull request diff, and posts the full report as one comment that it updates on every push instead of adding a new one. When the issues are fixed, the comment says so.
 
 ```yaml
-- run: npx @mscode-pl/email-lint --format github
+name: Emails
+
+on: pull_request
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  email-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Build your templates first, e.g. npx email export --outDir out
+      - uses: mscode-pl/email-lint@v1
+        with:
+          files: out
+          clients: gmail,outlook,apple-mail
+```
+
+| Input | Default | |
+| --- | --- | --- |
+| `files` | `files` from the config | Files, folders or globs, separated by spaces or new lines |
+| `clients` | config, then the defaults | Comma separated, e.g. `gmail,outlook.windows` |
+| `ignore` | | Feature slugs to skip, comma separated |
+| `strict` | `false` | Also report baseline features |
+| `fail-on` | config, then `error` | `error`, `warning` or `never` |
+| `config` | `email-lint.config.json` | Config file to read |
+| `comment` | `true` | Post the report as a pull request comment |
+| `github-token` | `github.token` | Token for the comment |
+| `version` | the action's release | email-lint version from npm |
+
+Outputs: `report` (path to the Markdown report, also shown in the job summary) and `exit-code`. The step needs Node 22; on an older runner the action installs it. Pull requests from forks get a read-only token, so they get the annotations and the job summary but no comment. GitHub shows at most 10 annotations of each level per step, and the comment lists the rest.
+
+### Any other CI
+
+`--format github` prints GitHub annotations, `-o report.md` saves a Markdown report:
+
+```yaml
+- run: npx @mscode-pl/email-lint --format github -o email-report.md
 ```
 
 The exit code is `1` when there are errors (or warnings with `--fail-on warning`), `0` otherwise, and `2` for bad arguments or no matching files.
@@ -143,6 +185,40 @@ for (const issue of issues) {
 `lint` is synchronous and does no I/O beyond reading the bundled dataset once. Every issue carries the caniemail slug, its URL, the affected lines and, per client and platform, the support status and notes.
 
 ## Use it from an AI agent
+
+### MCP server
+
+`email-lint mcp` starts an [MCP](https://modelcontextprotocol.io) server on stdio, so Claude, Cursor, VS Code and other MCP clients can check a template while they write it. It has two read-only tools:
+
+| Tool | What it does |
+| --- | --- |
+| `lint_email` | Lints `html` passed inline or a `path` (file, folder or glob) and returns every issue with its line, the affected clients and caniemail's notes. With neither, it lints the files from `email-lint.config.json`. |
+| `explain_feature` | For one slug, says which clients lack support, whether that breaks the email or only drops decoration, and how to fix it. |
+
+Paths are relative to the folder the client starts the server in, usually your project, and `email-lint.config.json` there sets the default clients and ignored features.
+
+Claude Code:
+
+```bash
+claude mcp add email-lint -- npx -y @mscode-pl/email-lint mcp
+```
+
+Cursor, VS Code, Claude Desktop and others take the same command in their MCP config:
+
+```json
+{
+  "mcpServers": {
+    "email-lint": {
+      "command": "npx",
+      "args": ["-y", "@mscode-pl/email-lint", "mcp"]
+    }
+  }
+}
+```
+
+To lint a folder that is named `mcp`, write it as `./mcp`.
+
+### Agent Skill
 
 The repo ships an [Agent Skill](skills/email-lint/SKILL.md) for Claude Code, Codex, Cursor and other agents. It runs email-lint on your templates, sorts the findings into must-fix and acceptable degradation, and proposes fixes in your source files (a table instead of flexbox, VML for rounded Outlook buttons, PNG instead of WebP).
 

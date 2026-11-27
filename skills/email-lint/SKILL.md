@@ -24,6 +24,8 @@ Blade syntax (`{{ }}`, `@if`) is read as text and does not cause false reports. 
 
 ## 2. Run the linter
 
+If the `lint_email` and `explain_feature` tools from the email-lint MCP server are available, use them instead of the command below: `lint_email` takes the same `clients`, `ignore` and `strict` options plus `html` or `path`, and `explain_feature` returns the fix for one slug.
+
 ```bash
 npx -y @mscode-pl/email-lint <files, folders or globs> --format json
 ```
