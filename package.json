@@ -1,7 +1,8 @@
 {
   "name": "@mscode-pl/email-lint",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Find the CSS and HTML in your emails that Outlook, Gmail, Apple Mail and other clients will break, with line numbers. Ships an MCP server and a GitHub Action. Works with React Email, MJML, Maizzle, Laravel and plain HTML.",
+  "mcpName": "io.github.mscode-pl/email-lint",
   "license": "MIT",
   "author": "MSCode (https://mscode.pl)",
   "type": "module",
