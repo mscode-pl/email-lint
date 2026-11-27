@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="972" height="545" viewBox="0 0 972 545" role="img" aria-label="email-lint output for an example email">
+  <rect width="100%" height="100%" rx="10" fill="#0d1117"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="14">
+  <text x="24" y="38" xml:space="preserve"><tspan fill="#8b949e">$</tspan><tspan fill="#e6edf3"> npx @mscode-pl/email-lint examples</tspan></text>
+  <text x="24" y="59" xml:space="preserve"></text>
+  <text x="24" y="80" xml:space="preserve"><tspan fill="#e6edf3" text-decoration="underline">examples/welcome.html</tspan></text>
+  <text x="24" y="101" xml:space="preserve"><tspan fill="#e6edf3">      8  </tspan><tspan fill="#ff7b72">error  </tspan><tspan fill="#e6edf3">  </tspan><tspan fill="#e6edf3" font-weight="700">:hover                  </tspan><tspan fill="#e6edf3">  Gmail (iOS), Outlook (Windows, Windows Mail, iOS)</tspan></text>
+  <text x="24" y="122" xml:space="preserve"><tspan fill="#e6edf3">                                            </tspan><tspan fill="#8b949e">css-pseudo-class-hover</tspan></text>
+  <text x="24" y="143" xml:space="preserve"><tspan fill="#e6edf3">  11 +2  </tspan><tspan fill="#e3b341">warning</tspan><tspan fill="#e6edf3">  </tspan><tspan fill="#e6edf3" font-weight="700">margin                  </tspan><tspan fill="#e6edf3">  Gmail (Desktop Webmail, iOS, Android),</tspan></text>
+  <text x="24" y="164" xml:space="preserve"><tspan fill="#e6edf3">                                            Outlook (Windows, Windows Mail, macOS, Outlook.com, iOS, Android),</tspan></text>
+  <text x="24" y="185" xml:space="preserve"><tspan fill="#e6edf3">                                            Yahoo! Mail (Desktop Webmail, iOS, Android)  </tspan><tspan fill="#8b949e">css-margin</tspan></text>
+  <text x="24" y="206" xml:space="preserve"><tspan fill="#e6edf3">     12  </tspan><tspan fill="#e3b341">warning</tspan><tspan fill="#e6edf3">  </tspan><tspan fill="#e6edf3" font-weight="700">max-width               </tspan><tspan fill="#e6edf3">  Outlook (Windows, Windows Mail)  </tspan><tspan fill="#8b949e">css-max-width</tspan></text>
+  <text x="24" y="227" xml:space="preserve"><tspan fill="#e6edf3">  12 +1  </tspan><tspan fill="#e3b341">warning</tspan><tspan fill="#e6edf3">  </tspan><tspan fill="#e6edf3" font-weight="700">padding                 </tspan><tspan fill="#e6edf3">  Outlook (Windows, Windows Mail)  </tspan><tspan fill="#8b949e">css-padding</tspan></text>
+  <text x="24" y="248" xml:space="preserve"><tspan fill="#e6edf3">     13  </tspan><tspan fill="#e3b341">warning</tspan><tspan fill="#e6edf3">  </tspan><tspan fill="#e6edf3" font-weight="700">width attribute         </tspan><tspan fill="#e6edf3">  Outlook (Windows)  </tspan><tspan fill="#8b949e">html-width</tspan></text>
+  <text x="24" y="269" xml:space="preserve"><tspan fill="#e6edf3">     13  </tspan><tspan fill="#ff7b72">error  </tspan><tspan fill="#e6edf3">  </tspan><tspan fill="#e6edf3" font-weight="700">webP image format       </tspan><tspan fill="#e6edf3">  Outlook (Windows)  </tspan><tspan fill="#8b949e">image-webp</tspan></text>
+  <text x="24" y="290" xml:space="preserve"><tspan fill="#e6edf3">     14  </tspan><tspan fill="#e3b341">warning</tspan><tspan fill="#e6edf3">  </tspan><tspan fill="#e6edf3" font-weight="700">font-size               </tspan><tspan fill="#e6edf3">  Outlook (Windows, Windows Mail),</tspan></text>
+  <text x="24" y="311" xml:space="preserve"><tspan fill="#e6edf3">                                            Yahoo! Mail (Desktop Webmail, iOS, Android),</tspan></text>
+  <text x="24" y="332" xml:space="preserve"><tspan fill="#e6edf3">                                            Samsung Email (Android)  </tspan><tspan fill="#8b949e">css-font-size</tspan></text>
+  <text x="24" y="353" xml:space="preserve"><tspan fill="#e6edf3">     15  </tspan><tspan fill="#e3b341">warning</tspan><tspan fill="#e6edf3">  </tspan><tspan fill="#e6edf3" font-weight="700">display                 </tspan><tspan fill="#e6edf3">  Gmail (iOS, Android), Outlook (Windows, Windows Mail),</tspan></text>
+  <text x="24" y="374" xml:space="preserve"><tspan fill="#e6edf3">                                            Yahoo! Mail (Desktop Webmail, iOS, Android)  </tspan><tspan fill="#8b949e">css-display</tspan></text>
+  <text x="24" y="395" xml:space="preserve"><tspan fill="#e6edf3">     15  </tspan><tspan fill="#ff7b72">error  </tspan><tspan fill="#e6edf3">  </tspan><tspan fill="#e6edf3" font-weight="700">display:flex            </tspan><tspan fill="#e6edf3">  Outlook (Windows, Windows Mail)  </tspan><tspan fill="#8b949e">css-display-flex</tspan></text>
+  <text x="24" y="416" xml:space="preserve"><tspan fill="#e6edf3">     15  </tspan><tspan fill="#ff7b72">error  </tspan><tspan fill="#e6edf3">  </tspan><tspan fill="#e6edf3" font-weight="700">gap, column-gap, row-gap</tspan><tspan fill="#e6edf3">  Outlook (Windows, Windows Mail),</tspan></text>
+  <text x="24" y="437" xml:space="preserve"><tspan fill="#e6edf3">                                            Yahoo! Mail (Desktop Webmail, iOS, Android)  </tspan><tspan fill="#8b949e">css-gap</tspan></text>
+  <text x="24" y="458" xml:space="preserve"><tspan fill="#e6edf3">     17  </tspan><tspan fill="#ff7b72">error  </tspan><tspan fill="#e6edf3">  </tspan><tspan fill="#e6edf3" font-weight="700">border-radius           </tspan><tspan fill="#e6edf3">  Outlook (Windows, Windows Mail)  </tspan><tspan fill="#8b949e">css-border-radius</tspan></text>
+  <text x="24" y="479" xml:space="preserve"></text>
+  <text x="24" y="500" xml:space="preserve"><tspan fill="#e6edf3">5 errors, 6 warnings in 1 of 1 file.</tspan></text>
+  <text x="24" y="521" xml:space="preserve"><tspan fill="#8b949e">Errors list clients without support, warnings list partial support. Add --verbose for notes and links.</tspan></text>
+  </g>
+</svg>
