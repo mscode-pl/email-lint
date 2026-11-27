@@ -1,5 +1,5 @@
 name: email-lint
-description: Find the CSS and HTML in your emails that Outlook, Gmail and Apple Mail will break, as pull request annotations and one comment.
+description: Find the CSS and HTML in your emails that Outlook, Gmail and Apple Mail break, as PR annotations and a comment.
 author: MSCode
 branding:
   icon: mail
