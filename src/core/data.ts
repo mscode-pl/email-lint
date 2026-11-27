@@ -26,7 +26,7 @@ let cached: Dataset | undefined;
 
 export function loadDataset(): Dataset {
   cached ??= JSON.parse(
-    readFileSync(new URL('../data/caniemail.json', import.meta.url), 'utf8'),
+    readFileSync(new URL('../../data/caniemail.json', import.meta.url), 'utf8'),
   ) as Dataset;
   return cached;
 }
