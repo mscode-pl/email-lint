@@ -1,0 +1,30 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.mscode-pl/email-lint",
+  "title": "email-lint",
+  "description": "Check email HTML against caniemail.com: the CSS and HTML Outlook, Gmail and Apple Mail break.",
+  "version": "0.2.1",
+  "repository": {
+    "url": "https://github.com/mscode-pl/email-lint",
+    "source": "github"
+  },
+  "websiteUrl": "https://github.com/mscode-pl/email-lint#readme",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@mscode-pl/email-lint",
+      "version": "0.2.1",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "positional",
+          "value": "mcp"
+        }
+      ]
+    }
+  ]
+}
