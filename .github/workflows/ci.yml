@@ -23,3 +23,20 @@ jobs:
       - run: pnpm test
       - run: pnpm build
       - run: node dist/cli/main.js examples --fail-on never
+      - run: node dist/cli/main.js mcp < /dev/null
+
+  action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Checks the composite wiring against a release already on npm.
+      - id: lint
+        uses: ./
+        with:
+          files: examples
+          clients: apple-mail
+          comment: 'false'
+          version: 0.1.0
+      - run: |
+          test "${{ steps.lint.outputs.exit-code }}" = "0"
+          grep -q "No issues" "${{ steps.lint.outputs.report }}"

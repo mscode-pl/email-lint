@@ -12,6 +12,7 @@ import { FORMATS, formatFromPath, onlyErrors, render, type FileResult, type Form
 import { runInteractive } from './interactive.js';
 
 const HELP = `Usage: email-lint [files, folders or globs...] [options]
+       email-lint mcp    Start an MCP server on stdio for AI agents
 
 Checks email HTML against caniemail.com support data.
 Run without arguments in a terminal for an interactive mode.
@@ -54,6 +55,12 @@ function version() {
 }
 
 async function main(): Promise<number> {
+  if (process.argv[2] === 'mcp' && process.argv.length === 3) {
+    const { serve } = await import('../mcp/server.js');
+    await serve();
+    return 0;
+  }
+
   const { values, positionals } = parseArgs({
     allowPositionals: true,
     options: {
