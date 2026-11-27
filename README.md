@@ -22,7 +22,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/screenshot.svg" alt="email-lint output: display:flex, gap and border-radius flagged as unsupported in Outlook for Windows, each with its line number" width="900">
+  <img src="docs/screenshot.svg" alt="email-lint output: display:flex, gap and border-radius flagged as unsupported in Outlook for Windows, each with its line number" width="920">
 </p>
 
 ## Try it
@@ -49,12 +49,14 @@ caniemail.com already tracks which client supports what. email-lint applies that
 
 ## What you get
 
-- Line numbers for every problem, in inline styles, `<style>` blocks and attributes alike.
-- 306 of the 308 features caniemail tracks: CSS properties and values, selectors and pseudo-classes, at-rules and media features, units and functions, HTML elements and attributes, image formats. The two it skips, BIMI and HDR images, cannot be seen in HTML.
-- Errors and warnings that mean something. An error is a feature at least one of your clients does not support at all. A warning is partial support, and `--verbose` prints caniemail's note on what exactly is missing.
-- Outlook conditional comments understood. Content inside `<!--[if !mso]><!-->` is hidden from Outlook for Windows, so email-lint does not blame Outlook for it. That is the hybrid layout pattern most email frameworks generate.
-- Low noise by default. Features every email needs (`<body>`, `<style>`, tables, class selectors, `role` and `aria-*`) are not reported, because the only fix would be removing them. `--strict` shows everything.
-- Reports you can share: Markdown for a pull request, JSON for scripts, GitHub annotations on the pull request.
+| Feature | Details |
+| --- | --- |
+| **Line numbers for every problem** | In inline styles, `<style>` blocks and attributes alike. |
+| **306 of 308 caniemail features** | CSS properties and values, selectors and pseudo-classes, at-rules and media features, units and functions, HTML elements and attributes, image formats. BIMI and HDR images cannot be seen in HTML. |
+| **Errors that mean something** | An error is a feature at least one of your clients does not support at all. A warning is partial support, and `--verbose` prints caniemail's note on what is missing. |
+| **Outlook conditionals understood** | Content inside `<!--[if !mso]><!-->` is hidden from Outlook for Windows, so it is not blamed for it. That is the hybrid layout most email frameworks generate. |
+| **Low noise by default** | `<body>`, `<style>`, tables, class selectors, `role` and `aria-*` are not reported, because the only fix would be removing them. `--strict` shows everything. |
+| **Reports you can share** | Markdown for a pull request, JSON for scripts, GitHub annotations on the pull request. |
 
 ## Works with your stack
 
@@ -80,7 +82,14 @@ email-lint emails/ --clients outlook.windows      # one platform of one client
 email-lint emails/ --clients all                  # every client caniemail tests
 ```
 
-Known clients: `gmail`, `outlook`, `apple-mail`, `yahoo`, `samsung-email`, `thunderbird`, `protonmail`, `fastmail`, `hey`, `aol`, `wp-pl`, `gmx`, `web-de`, `t-online-de`, `orange`, `sfr`, `free-fr`, `laposte`, `mail-ru`, `ionos-1and1`, `rainloop`, `microsoft`. A typo fails with the list of valid names instead of silently checking nothing.
+A typo fails with the list of valid names instead of silently checking nothing.
+
+<details>
+<summary>All 22 clients</summary>
+
+`gmail`, `outlook`, `apple-mail`, `yahoo`, `samsung-email`, `thunderbird`, `protonmail`, `fastmail`, `hey`, `aol`, `wp-pl`, `gmx`, `web-de`, `t-online-de`, `orange`, `sfr`, `free-fr`, `laposte`, `mail-ru`, `ionos-1and1`, `rainloop`, `microsoft`
+
+</details>
 
 ## Use it in CI
 
@@ -114,8 +123,7 @@ The exit code is `1` when there are errors (or warnings with `--fail-on warning`
 | `--strict` | off | Also report baseline features and Gmail in a mobile browser |
 | `-f, --format <type>` | `text` | `text`, `json`, `markdown` or `github` |
 | `-o, --output <file>` | | Also save a full report; `.json` and `.md` pick the format |
-| `--verbose` | off | caniemail notes and links for every issue |
-| `-q, --quiet` | off | Errors only |
+| `--verbose` / `-q, --quiet` | off | caniemail notes and links / errors only |
 | `--fail-on <level>` | `error` | `error`, `warning` or `never` |
 | `--config <file>` | `email-lint.config.json` | Config file to read |
 | `--stdin` | | Read HTML from stdin |
