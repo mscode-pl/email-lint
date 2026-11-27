@@ -1,4 +1,5 @@
 import type { Feature } from './data.js';
+import type { SelectorInfo } from './selectors.js';
 
 export interface Declaration {
   prop: string;
@@ -21,21 +22,6 @@ export interface Rule {
   atRule?: (a: AtRule) => boolean;
   selector?: (s: SelectorInfo) => boolean;
   element?: (e: Element) => boolean;
-}
-
-export interface SelectorInfo {
-  raw: string;
-  grouping: boolean;
-  child: boolean;
-  adjacent: boolean;
-  generalSibling: boolean;
-  descendant: boolean;
-  type: boolean;
-  universal: boolean;
-  cls: boolean;
-  id: boolean;
-  attribute: boolean;
-  chaining: boolean;
 }
 
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

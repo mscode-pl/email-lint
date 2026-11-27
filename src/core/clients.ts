@@ -14,7 +14,8 @@ export type Status = 'unsupported' | 'partial';
 export interface ClientSupport {
   family: string;
   platform: string;
-  client: string;
+  familyName: string;
+  platformName: string;
   status: Status;
   notes: string[];
 }
@@ -32,12 +33,26 @@ export interface ClientSelection {
   exclude: Set<string>;
 }
 
-export function parseClients(input: string[] | undefined, strict = false): ClientSelection {
+export function parseClients(
+  input: string[] | undefined,
+  dataset: Dataset,
+  strict = false,
+): ClientSelection {
   const list = (input?.length ? input : DEFAULT_CLIENTS).map((e) => e.trim().toLowerCase());
   const exclude = new Set(strict ? [] : SKIPPED_PLATFORMS.filter((p) => !list.includes(p)));
   if (list.includes('all')) return { include: 'all', exclude };
+
+  const { family: families, platform: platforms } = dataset.nicenames;
   const include = list.map((entry) => {
     const [family, platform] = entry.split('.');
+    if (!(family in families)) {
+      throw new Error(`Unknown client "${entry}". Known: ${Object.keys(families).join(', ')}.`);
+    }
+    if (platform && !(platform in platforms)) {
+      throw new Error(
+        `Unknown platform "${platform}" in "${entry}". Known: ${Object.keys(platforms).join(', ')}.`,
+      );
+    }
     return { family, platform };
   });
   return { include, exclude };
@@ -77,7 +92,8 @@ export function unsupportedClients(
       result.push({
         family,
         platform,
-        client: `${dataset.nicenames.family[family] ?? family} (${dataset.nicenames.platform[platform] ?? platform})`,
+        familyName: dataset.nicenames.family[family] ?? family,
+        platformName: dataset.nicenames.platform[platform] ?? platform,
         status,
         notes,
       });

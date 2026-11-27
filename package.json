@@ -1,22 +1,31 @@
 {
   "name": "@mscode-pl/email-lint",
   "version": "0.1.0",
-  "description": "Check email HTML against caniemail.com support data. Works with any HTML: React Email, MJML, Maizzle, Laravel, hand-written.",
+  "description": "Find the CSS and HTML in your emails that Outlook, Gmail, Apple Mail and other clients will break, with line numbers. Works with React Email, MJML, Maizzle, Laravel and plain HTML.",
   "license": "MIT",
+  "author": "MSCode (https://mscode.pl)",
   "type": "module",
-  "repository": "https://github.com/mscode-pl/email-lint",
+  "homepage": "https://github.com/mscode-pl/email-lint#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mscode-pl/email-lint.git"
+  },
+  "bugs": "https://github.com/mscode-pl/email-lint/issues",
   "keywords": [
     "email",
     "html-email",
     "lint",
+    "linter",
     "caniemail",
     "outlook",
     "gmail",
     "react-email",
-    "mjml"
+    "mjml",
+    "maizzle",
+    "cli"
   ],
   "bin": {
-    "email-lint": "./dist/cli.js"
+    "email-lint": "./dist/cli/main.js"
   },
   "exports": {
     ".": {
@@ -31,13 +40,20 @@
   "engines": {
     "node": ">=22"
   },
+  "packageManager": "pnpm@12.14.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "update-data": "node scripts/update-data.mjs"
+    "update-data": "node scripts/update-data.mjs",
+    "screenshot": "pnpm build && node scripts/render-screenshot.mjs",
+    "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build"
   },
   "dependencies": {
+    "@clack/prompts": "^1.9.0",
     "domhandler": "^6.0.1",
     "htmlparser2": "^12.0.0",
     "postcss": "^8.5.33"

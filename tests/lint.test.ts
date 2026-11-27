@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { analyzeSelector, lint } from '../src/index.js';
+import { lint } from '../src/index.js';
 
 const fixture = readFileSync(new URL('./fixtures/newsletter.html', import.meta.url), 'utf8');
 const slugs = (html: string, clients = ['all']) => lint(html, { clients }).issues.map((i) => i.slug);
@@ -83,23 +83,26 @@ describe('lint', () => {
     const result = lint('<style>.a { color: red</style>');
     expect(result.parseErrors).toHaveLength(1);
   });
-});
 
-describe('analyzeSelector', () => {
-  it('detects combinators', () => {
-    expect(analyzeSelector('.a > .b + .c ~ .d .e')).toMatchObject({
-      child: true,
-      adjacent: true,
-      generalSibling: true,
-      descendant: true,
-    });
+  it('does not blame Outlook for Windows for content hidden from it', () => {
+    const html = '<!--[if !mso]><!--><div style="display:flex"></div><!--<![endif]-->';
+    const flex = lint(html, { clients: ['outlook'] }).issues.find((i) => i.slug === 'css-display-flex');
+    const platforms = flex?.clients.map((c) => c.platform) ?? [];
+    expect(platforms).not.toContain('windows');
+    expect(platforms).not.toContain('windows-mail');
   });
 
-  it('ignores combinators inside pseudo-class arguments', () => {
-    expect(analyzeSelector('p:not(.a > .b)')).toMatchObject({ child: false, type: true });
+  it('still blames Outlook for Windows after the hidden block ends', () => {
+    const html = '<!--[if !mso]><!--><b></b><!--<![endif]--><div style="display:flex"></div>';
+    const flex = lint(html, { clients: ['outlook.windows'] }).issues.find(
+      (i) => i.slug === 'css-display-flex',
+    );
+    expect(flex?.level).toBe('error');
   });
 
-  it('detects grouping and chaining', () => {
-    expect(analyzeSelector('.a.b, #c')).toMatchObject({ grouping: true, chaining: true, id: true });
+  it('rejects unknown clients and feature slugs', () => {
+    expect(() => lint('<p></p>', { clients: ['outlok'] })).toThrow(/Unknown client "outlok"/);
+    expect(() => lint('<p></p>', { clients: ['outlook.windos'] })).toThrow(/Unknown platform/);
+    expect(() => lint('<p></p>', { ignore: ['css-dispaly-flex'] })).toThrow(/css-dispaly-flex/);
   });
 });

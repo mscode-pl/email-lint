@@ -3,8 +3,9 @@ import type { ChildNode, Element as DomElement } from 'domhandler';
 import postcss, { type AtRule as AtRuleNode, type ChildNode as CssNode, type Root } from 'postcss';
 import { BASELINE_FEATURES } from './baseline.js';
 import { loadDataset, type Feature } from './data.js';
-import { buildRules, type Rule, type SelectorInfo } from './rules.js';
-import { parseClients, unsupportedClients, type ClientSupport } from './support.js';
+import { buildRules, type Rule } from './rules.js';
+import { analyzeSelector } from './selectors.js';
+import { parseClients, unsupportedClients, type ClientSupport } from './clients.js';
 
 export interface LintOptions {
   clients?: string[];
@@ -52,24 +53,36 @@ const IMAGE_EXTENSIONS: Record<string, string> = {
   webp: 'image-webp',
 };
 
+// Outlook for Windows renders with Word and skips everything between these two comments.
+const WORD_PLATFORMS = new Set(['outlook.windows', 'outlook.windows-mail']);
+const NOT_MSO_START = /^\[if\s+!mso\]>\s*<!/i;
+const NOT_MSO_END = /^\s*<!\[endif\]\s*$/i;
+
 let rulesCache: Map<string, Rule> | undefined;
 
 export function lint(html: string, options: LintOptions = {}): LintResult {
   const dataset = loadDataset();
   rulesCache ??= buildRules(dataset.data);
   const rules = [...rulesCache];
-  const selection = parseClients(options.clients, options.strict);
+  const selection = parseClients(options.clients, dataset, options.strict);
+
+  const unknown = (options.ignore ?? []).filter((slug) => !dataset.data.some((f) => f.slug === slug));
+  if (unknown.length) {
+    throw new Error(`Unknown feature slug in ignore list: ${unknown.join(', ')}.`);
+  }
   const ignored = new Set([...(options.ignore ?? []), ...(options.strict ? [] : BASELINE_FEATURES)]);
 
-  const hits = new Map<string, Set<number>>();
+  const hits = new Map<string, { lines: Set<number>; seenByWord: boolean }>();
   const parseErrors: ParseError[] = [];
   const lineOf = lineLocator(html);
+  let hiddenFromWord = false;
 
   const hit = (slug: string, line: number) => {
     if (ignored.has(slug)) return;
-    let lines = hits.get(slug);
-    if (!lines) hits.set(slug, (lines = new Set()));
-    lines.add(line);
+    let entry = hits.get(slug);
+    if (!entry) hits.set(slug, (entry = { lines: new Set(), seenByWord: false }));
+    entry.lines.add(line);
+    if (!hiddenFromWord) entry.seenByWord = true;
   };
 
   const checkUrl = (url: string, line: number) => {
@@ -131,6 +144,8 @@ export function lint(html: string, options: LintOptions = {}): LintResult {
       const line = lineOf(node.startIndex ?? 0);
 
       if (node.type === 'comment') {
+        if (NOT_MSO_START.test(node.data)) hiddenFromWord = true;
+        else if (NOT_MSO_END.test(node.data)) hiddenFromWord = false;
         hit('html-comments', line);
         continue;
       }
@@ -166,10 +181,12 @@ export function lint(html: string, options: LintOptions = {}): LintResult {
   walk(parseDocument(html, { withStartIndices: true }).children);
 
   const issues: Issue[] = [];
-  for (const [slug, lines] of hits) {
+  for (const [slug, { lines, seenByWord }] of hits) {
     const feature = dataset.data.find((f) => f.slug === slug);
     if (!feature) continue;
-    const clients = unsupportedClients(feature, dataset, selection);
+    const clients = unsupportedClients(feature, dataset, selection).filter(
+      (c) => seenByWord || !WORD_PLATFORMS.has(`${c.family}.${c.platform}`),
+    );
     if (!clients.length) continue;
     issues.push({
       slug,
@@ -215,44 +232,4 @@ function insideKeyframes(node: CssNode): boolean {
 
 function stripStrings(value: string) {
   return value.replace(/"[^"]*"|'[^']*'/g, '""').replace(/url\([^)]*\)/gi, 'url()');
-}
-
-export function analyzeSelector(selector: string): SelectorInfo {
-  let s = selector.replace(/"[^"]*"|'[^']*'/g, '""').replace(/\[[^\]]*\]/g, '[]');
-  // Collapse pseudo-class arguments so `:not(.a > b)` does not count as a child combinator.
-  while (/\([^()]+\)/.test(s)) s = s.replace(/\([^()]+\)/g, '()');
-
-  const parts = s.split(',').map((p) => p.trim()).filter(Boolean);
-  const info: SelectorInfo = {
-    raw: selector,
-    grouping: parts.length > 1,
-    child: false,
-    adjacent: false,
-    generalSibling: false,
-    descendant: false,
-    type: false,
-    universal: false,
-    cls: false,
-    id: false,
-    attribute: false,
-    chaining: false,
-  };
-
-  for (const part of parts) {
-    const tight = part.replace(/\s*([>+~])\s*/g, '$1');
-    if (tight.includes('>')) info.child = true;
-    if (tight.includes('+')) info.adjacent = true;
-    if (tight.includes('~')) info.generalSibling = true;
-    if (/\S\s+\S/.test(tight)) info.descendant = true;
-
-    for (const compound of tight.split(/[\s>+~]+/)) {
-      if (/^[a-z][\w-]*/i.test(compound)) info.type = true;
-      if (compound.startsWith('*')) info.universal = true;
-      if (/\.[\w-]/.test(compound)) info.cls = true;
-      if (/#[\w-]/.test(compound)) info.id = true;
-      if (compound.includes('[]')) info.attribute = true;
-      if ((compound.match(/\.[\w-]+|#[\w-]+|\[\]/g) ?? []).length >= 2) info.chaining = true;
-    }
-  }
-  return info;
 }
