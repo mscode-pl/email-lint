@@ -6,11 +6,11 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@mscode-pl/email-lint"><img src="https://img.shields.io/npm/v/@mscode-pl/email-lint?style=flat-square&color=1A5BB5" alt="npm version"></a>
-  <a href="https://www.npmjs.com/package/@mscode-pl/email-lint"><img src="https://img.shields.io/npm/dm/@mscode-pl/email-lint?style=flat-square&color=1A5BB5" alt="npm downloads"></a>
-  <a href="https://github.com/mscode-pl/email-lint/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mscode-pl/email-lint/ci.yml?branch=master&style=flat-square&label=tests" alt="Tests"></a>
-  <img src="https://img.shields.io/badge/node-22%2B-339933?style=flat-square" alt="Node 22+">
-  <a href="LICENSE"><img src="https://img.shields.io/npm/l/@mscode-pl/email-lint?style=flat-square" alt="License"></a>
+  <a href="https://www.npmjs.com/package/@mscode-pl/email-lint"><img src="https://badges.mscode.pl/npm/v/@mscode-pl/email-lint" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@mscode-pl/email-lint"><img src="https://badges.mscode.pl/npm/dm/@mscode-pl/email-lint" alt="npm downloads"></a>
+  <a href="https://github.com/mscode-pl/email-lint/actions/workflows/ci.yml"><img src="https://badges.mscode.pl/github/actions/mscode-pl/email-lint/ci.yml?branch=master&label=tests" alt="Tests"></a>
+  <img src="https://badges.mscode.pl/badge/node/22+/339933?icon=nodejs" alt="Node 22+">
+  <a href="LICENSE"><img src="https://badges.mscode.pl/npm/l/@mscode-pl/email-lint" alt="License"></a>
 </p>
 
 <p align="center">
@@ -176,7 +176,7 @@ pnpm build && node dist/cli/main.js examples
 
 ## License
 
-MIT. Support data from [caniemail](https://github.com/hteumeuleu/caniemail) by Rémi Parmentier, MIT License.
+MIT. Support data from [caniemail](https://github.com/hteumeuleu/caniemail) by Rémi Parmentier, MIT License, see [data/LICENSE-caniemail](data/LICENSE-caniemail).
 
 ---
 
